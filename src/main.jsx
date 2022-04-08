@@ -1,5 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+
+import 'lib-flexible/flexible'
+
 import './index.css'
 import App from './App'
 
