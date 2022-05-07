@@ -4,6 +4,7 @@ import CustomIcon from '@/components/CustomIcon'
 import Captcha from "react-captcha-code"
 import classNames from "classNames"
 import { login, register } from "./api/index"
+import { useNavigate } from 'react-router-dom';
 
 import s from './style.module.less'
 
@@ -13,6 +14,7 @@ const Login = () => {
   const [verify, setVerify] = useState(''); // 验证码
   const [captcha, setCaptcha] = useState(''); // 验证码变化后存储值
   const [type, setType] = useState('login'); // 登录注册类型
+  const navigate = useNavigate()
 
   // 验证码变化，回调方法
   const handleChange = useCallback((captcha) => {
@@ -42,6 +44,7 @@ const Login = () => {
           // 将 token 写入 localStorage
           localStorage.setItem('token', data.token);
           Toast.show('登录成功');
+          navigate('/');
         } else {
           Toast.show(desc);
         }

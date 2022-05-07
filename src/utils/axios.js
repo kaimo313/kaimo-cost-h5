@@ -30,31 +30,23 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
   // 成功响应的拦截
   console.log('进入响应拦截器-->response：', response);
-  return Promise.resolve(response.data)
-}, err =>{
-  // 失败响应的拦截
-  console.log('进入响应拦截器-->err：', err);
-  Toast.show("服务器响应失败");
-  if(err.response){
+  if(response){
     // 失败响应的status需要在response中获得
-    console.log(err.response)
-    switch(err.response.status){
+    switch(response.data.status){
       // 对得到的状态码的处理，具体的设置视自己的情况而定
       case 401:
         console.log('未登录')
         window.location.href='/login';
         break
-      case 404:
-        console.log('没有找到该方法');
-        break
-      case 405:
-        console.log('不支持的方法');
-        break
       default:
-        console.log('其他错误');
         break
     }
   }
+  return Promise.resolve(response.data)
+}, err =>{
+  // 失败响应的拦截
+  console.log('进入响应拦截器-->err：', err);
+  Toast.show("服务器响应失败");
   // 注意这里应该return promise.reject(),
   // 因为如果直接return err则在调用此实例时，响应失败了也会进入then(res=>{})而不是reject或catch方法
   return Promise.reject(err)
