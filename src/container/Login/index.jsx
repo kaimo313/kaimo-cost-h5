@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { Cell, Input, Button, Toast } from 'zarm'
 import CustomIcon from '@/components/CustomIcon'
 import Captcha from "react-captcha-code"
-import classNames from "classNames"
+import cx from "classnames"
 import { login, register } from "./api/index"
 import { useNavigate } from 'react-router-dom';
 
@@ -78,8 +78,8 @@ const Login = () => {
   return <div className={s.auth}>
     <div className={s.head} />
     <div className={s.tab}>
-      <span className={classNames({ [s.avtive]: type == 'login' })} onClick={() => setType('login')}>登录</span>
-      <span className={classNames({ [s.avtive]: type == 'register' })} onClick={() => setType('register')}>注册</span>
+      <span className={cx({ [s.avtive]: type == 'login' })} onClick={() => setType('login')}>登录</span>
+      <span className={cx({ [s.avtive]: type == 'register' })} onClick={() => setType('register')}>注册</span>
     </div>
     <div className={s.form}>
       <Cell icon={<CustomIcon type="user" />}>

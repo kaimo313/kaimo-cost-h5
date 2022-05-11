@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Icon, Pull } from 'zarm'
+import CustomIcon from '@/components/CustomIcon'
 import dayjs from 'dayjs'
 import BillItem from '@/components/BillItem'
 import PopupType from '@/components/PopupType'
 import PopupDate from '@/components/PopupDate'
+import PopupAddBill from '@/components/PopupAddBill'
 import { queryBillList } from './api/index.js'
 import { REFRESH_STATE, LOAD_STATE } from '@/utils/index.js' // Pull 组件需要的一些常量
 
@@ -12,6 +14,7 @@ import s from './style.module.less'
 const Home = () => {
   const typeRef = useRef(); // 账单类型 ref
   const monthRef = useRef(); // 月份筛选 ref
+  const addRef = useRef(); // 新增账单 ref
   const [currentSelect, setCurrentSelect] = useState({}); // 当前筛选类型
   const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY-MM')); // 当前筛选时间
   const [totalExpense, setTotalExpense] = useState(0); // 总支出
@@ -87,6 +90,11 @@ const Home = () => {
     setCurrentTime(item)
   }
 
+  // 添加账单弹窗
+  const addToggle = () => {
+    addRef.current && addRef.current.show()
+  }
+
   return <div className={s.home}>
     <div className={s.header}>
       <div className={s.dataWrap}>
@@ -127,7 +135,9 @@ const Home = () => {
       }
       <PopupType ref={typeRef} onSelect={select} />
       <PopupDate ref={monthRef} mode="month" onSelect={selectMonth} />
+      <PopupAddBill ref={addRef} onReload={refreshData} />
     </div>
+    <div className={s.add} onClick={addToggle}><CustomIcon type='bianji' /></div>
   </div>
 }
 

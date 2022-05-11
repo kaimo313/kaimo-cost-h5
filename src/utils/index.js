@@ -61,7 +61,7 @@ export const typeMap = {
     icon: 'licai'
   },
   15: {
-    icon: 'tuikuang'
+    icon: 'tuikuan'
   },
   16: {
     icon: 'qita'
