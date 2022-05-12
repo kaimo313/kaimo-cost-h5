@@ -4,15 +4,15 @@ import CustomIcon from '@/components/CustomIcon'
 import PopupDate from '../PopupDate'
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { queryTypeList, addBillData } from './api/index.js'
+import { queryTypeList, billAdd, billUpdate } from './api/index.js'
 import { typeMap } from '@/utils';
 import cx from 'classnames';
 
 import s from './style.module.less';
 
-const PopupAddBill = forwardRef((props, ref) => {
+const PopupAddBill = forwardRef(({ detail = {}, onReload }, ref) => {
   const dateRef = useRef();
-
+  const id = detail && detail.id // 外部传进来的账单详情 id
   const [show, setShow] = useState(false) // 内部控制弹窗显示隐藏。
   const [date, setDate] = useState(new Date()); // 日期
   const [payType, setPayType] = useState('expense'); // 支出或收入类型
@@ -22,6 +22,20 @@ const PopupAddBill = forwardRef((props, ref) => {
   const [income, setIncome] = useState([]); // 收入类型数组
   const [remark, setRemark] = useState(''); // 备注
   const [showRemark, setShowRemark] = useState(false); // 备注输入框
+
+  // 详情信息回显
+  useEffect(() => {
+    if (detail.id) {
+      setPayType(detail.pay_type == 1 ? 'expense' : 'income')
+      setCurrentType({
+        id: detail.type_id,
+        name: detail.type_name
+      })
+      setRemark(detail.remark)
+      setAmount(detail.amount)
+      setDate(detail.date)
+    }
+  }, [detail])
 
   // 通过 forwardRef 拿到外部传入的 ref，并添加属性，使得父组件可以通过 ref 控制子组件。
   if (ref) {
@@ -41,7 +55,10 @@ const PopupAddBill = forwardRef((props, ref) => {
     const _income = data.filter(i => i.type == 2); // 收入类型
     setExpense(_expense);
     setIncome(_income);
-    setCurrentType(_expense[0]); // 新建账单，类型默认是支出类型数组的第一项
+    // 没有 id 的情况下，说明是新建账单。
+    if(!id) {
+      setCurrentType(_expense[0]); // 新建账单，类型默认是支出类型数组的第一项
+    }
   }, [])
 
   // 切换收入还是支出
@@ -98,18 +115,38 @@ const PopupAddBill = forwardRef((props, ref) => {
       pay_type: payType == 'expense' ? 1 : 2,
       remark: remark || ''
     }
-    const result = await addBillData(params);
-    console.log(result);
-    // 重置参数
-    setAmount('');
-    setPayType('expense');
-    setCurrentType(expense[0]);
-    setDate(new Date());
-    setRemark('');
-    Toast.show('添加成功');
+    // 如果有id，调用编辑账单，没有就新增账单
+    if(id) {
+      const { status, desc, data } = await billUpdate({
+        id, ...params
+      });
+      console.log('编辑账单', status, desc, data);
+      if(status === 200) {
+        Toast.show('编辑成功');
+      }else{
+        Toast.show(desc);
+        return ;
+      }
+    }else{
+      const { status, desc, data } = await billAdd(params);
+      console.log('新增账单', status, desc, data);
+      if(status === 200) {
+        Toast.show('新增成功');
+      }else{
+        Toast.show(desc);
+        return ;
+      }
+      // 重置参数
+      setAmount('');
+      setPayType('expense');
+      setCurrentType(expense[0]);
+      setDate(new Date());
+      setRemark('');
+      Toast.show('添加成功');
+    }
     setShow(false);
     // 刷新数据
-    if (props.onReload) props.onReload();
+    if (onReload) onReload();
   }
 
   return <Popup
@@ -173,5 +210,10 @@ const PopupAddBill = forwardRef((props, ref) => {
     </div>
   </Popup>
 })
+
+PopupAddBill.propTypes = {
+  detail: PropTypes.object,
+  onReload: PropTypes.func
+}
 
 export default PopupAddBill

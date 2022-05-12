@@ -6,6 +6,11 @@ export function queryTypeList(data) {
 }
 
 // 添加账单
-export function addBillData(data) {
+export function billAdd(data) {
   return fetchData('/api/bill/add', 'post', data);
+}
+
+// 更新账单信息
+export function billUpdate(data) {
+  return fetchData('/api/bill/update', 'post', data);
 }
