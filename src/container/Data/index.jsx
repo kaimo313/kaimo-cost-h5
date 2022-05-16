@@ -68,16 +68,14 @@ const Data = () => {
   const monthShow = () => {
     monthRef.current && monthRef.current.show();
   };
-
+  // 选择月份
   const selectMonth = (item) => {
     setCurrentMonth(item);
   };
-
   // 切换收支构成类型
   const changeTotalType = (type) => {
     setTotalType(type);
   };
-
   // 切换饼图收支类型
   const changePieType = (type) => {
     setPieType(type);

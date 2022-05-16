@@ -24,7 +24,7 @@ const PieChart = ({ chartData = [] }) => {
             adjust="stack"
             color={{
               field: "type_name",
-              range: ['#873bf4', '#1890FF', '#13C2C2', '#2FC25B', '#FACC14', '#ffc0cb', '#ff7875', '#F04864', '#e91e63', '#0d1a26'],
+              range: ['#5a71c1', '#9eca7e', '#f3ca6b', '#df6e6b', '#84bedb', '#589f74', '#ed8a5c', '#1e80ff', '#fc5531', '#67c23a'],
             }}
             selection={{
               selectedStyle: (record) => {
