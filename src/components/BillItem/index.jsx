@@ -5,6 +5,9 @@ import { Cell } from 'zarm';
 import { useNavigate } from 'react-router-dom'
 import CustomIcon from '../CustomIcon';
 import { typeMap } from '@/utils';
+import zhi from "@/assets/images/zhi.png";
+import shou from "@/assets/images/shou.png";
+
 
 import s from './style.module.less';
 
@@ -40,11 +43,11 @@ const BillItem = ({ bill }) => {
       <div className={s.date}>{bill.day}</div>
       <div className={s.money}>
         <span>
-          <img src={`src/assets/images/zhi.png`} alt='支' />
+          <img src={zhi} alt='支' />
             <span>¥{ expense.toFixed(2) }</span>
         </span>
         <span>
-          <img src={`src/assets/images/shou.png`} alt="收" />
+          <img src={shou} alt="收" />
           <span>¥{ income.toFixed(2) }</span>
         </span>
       </div>

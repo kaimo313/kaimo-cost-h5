@@ -70,8 +70,13 @@ export function fetchData(url, type, data) {
     config.url = url + '?r=' + Math.random() * 1000;
     config.params = data;
   } else if (ajaxType === 'post') {
-    config.data = data;
-    config.headers['Content-Type'] = 'application/json;charset=UTF-8';
+    if(data.forms) {
+      config.data = data.forms;
+      config.headers['Content-Type'] = 'multipart/form-data;charset=UTF-8';
+    }else{
+      config.data = data;
+      config.headers['Content-Type'] = 'application/json;charset=UTF-8';
+    }
   }
   console.log('进入fetchData', url, type, data, config);
   return axios(config);
